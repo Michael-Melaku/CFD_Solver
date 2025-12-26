@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+\section{Continuous problem}
+The one-dimensional wave equation is
+\[
+\frac{\partial^2 u}{\partial t^2}
+=
+c^2 \frac{\partial^2 u}{\partial x^2}.
+\]
+
+To apply a finite-volume method, it is convenient to rewrite this a s first-order sytem.
+\section{First-order hyperbolic systems}
+Introduce the auxiliary variables
+\[
+v = \frac{\partial u}{\partial t},
+\qquad
+q = \frac{\partial u}{\partial x},
+\]
+The wave equation becomes
+\[
+\begin{aligned}
+\frac{\partial u}{\partial t} &= v, \\
+\frac{\partial v}{\partial t} &= c^2 \frac{\partial q}{\partial x}, \\
+\frac{\partial q}{\partial t} &= \frac{\partial v}{\partial x}.
+\end{aligned}
+\]
+This is a conservative hyperbolic system.
+\section{Finite volume formulation}
+\textbf{Control volumes}
+
+Divide the domain into cells
+\(
+[x_{i-\frac12}, x_{i+\frac12}]
+\)
+of width \(\Delta x\).
+Define cell averages
+\[
+\bar{u}_i = \frac{1}{\Delta x}
+\int_{x_{i-\frac12}}^{x_{i+\frac12}} u(x,t)\,dx.
+\]
+and similarly for $\bar{v}_i(t)$ and $\bar{q}_i(t)$.
+\section{Integral form and discretization}
+(a) Equation for $u$
+
+Integrate over the cell: The finite-volume semi-discrete scheme is
+\[
+\frac{d \bar{u}_i}{dt} = \bar{v}_i,
+\]
+\\
+(b) Equation for $v$
+\[
+\frac{d \bar{v}_i}{dt}
+=
+\frac{c^2}{\Delta x}
+\left(
+q_{i+\frac12} - q_{i-\frac12}
+\right),
+\]
+
+where $q_{i\pm\frac12}$ are numerical fluxes at cell interfaces.\\
+
+
+(c) Equation for $q$
+
+\[
+\frac{d \bar{q}_i}{dt}
+=
+\frac{1}{\Delta x}
+\left(
+v_{i+\frac12} - v_{i-\frac12}
+\right).
+\]
+
+\section{Numerical fluxes (Using central numerical fluxes)}
+
+For a standard second-order FV scheme, interface values are reconstructed using centeral differences: 
+
+\[
+q_{i+\frac12} = \frac{1}{2}(\bar{q}_i + \bar{q}_{i+1}),
+\qquad
+v_{i+\frac12} = \frac{1}{2}(\bar{v}_i + \bar{v}_{i+1}).
+\]
+
+This yields a second-order accurate spatial discretization.
+
+\section{Time discretization (explicit, second order)}
+
+\[
+\frac{\bar{u}^{n+1}_{i} - 2\bar{u}^{n}_i + \bar{u}^{n-1}_{i}}{(\Delta t)^2} 
+= c^2\frac{\bar{n}^{n}_{i+1} - 2\bar{u}^{n}_i + \bar{u}^{n}_{i-1}}{(\Delta x)^2}
+\]
+This is the finite-volume equivalent of the classical second-order wave scheme, but derived from conservative laws.
+
+\section{CFL stability condition}
+For explicit time integration: the CFL condition is
+\[
+\frac{c \Delta t}{\Delta x} \le 1.
+\]
+
+\end{document}
+
